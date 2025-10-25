@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insertar Producto en Venta</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1e1e1e;
+        color: #f2f2f2;
+        margin: 0;
+        padding: 0px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #333;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        color: #f2f2f2;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        background-color: #444;
+        color: #f2f2f2;
+        border: 1px solid #555;
+        border-radius: 5px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #6a0dad;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 15px;
+      }
+
+      button:hover {
+        background-color: #7f00ff;
+      }
+
+      #notification {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+      }
+
+      #notification.success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      #notification.error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      /* Estilos para la navbar */
+      .navbar {
+        display: flex;
+        margin-bottom: 20px;
+        background-color: #333;
+        padding: 14px 20px;
+      }
+
+      .navbar a {
+        color: white;
+        padding: 14px 20px;
+        text-decoration: none;
+        text-align: center;
+        background-color: #6a0dad; /* Color morado */
+        border-radius: 5px;
+        margin-left: 10px; /* Separación entre los botones */
+      }
+
+      .navbar a:hover {
+        background-color: #7f00ff; /* Color morado más claro al pasar el cursor */
+        color: white;
+      }
+
+      
+    </style>
+  </head>
+  <body>
+    <!-- Navbar con enlaces a las diferentes secciones -->
+    <div class="navbar">
+      <a href="panelAdmin.html">Panel de Administración</a>
+      <a href="insertar-producto.html">Insertar Producto</a>
+      <a href="registerAdmin.html">Registrar</a>
+      <a href="Categorias.html">Registrar Categoría</a>
+      <a href="#" onclick="cerrarSesion()">Cerrar Sesión</a>
+    </div>
+    <div class="container">
+      <h1>Insertar Producto en Venta</h1>
+      <form id="productForm" enctype="multipart/form-data">
+        <label for="descripcion">Descripción del Producto:</label>
+        <input type="text" id="descripcion" name="descripcion" required />
+
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="categoria">
+          <option value="celular">Celular</option>
+          <option value="electronico">Electrónico</option>
+          <option value="joya">Joya</option>
+          <option value="reloj">Reloj</option>
+          <option value="herramienta">Herramienta</option>
+        </select>
+
+        <label for="foto">Foto del Producto:</label>
+        <input type="file" id="foto" name="foto" accept="image/*" required />
+
+        <label for="precio">Precio (Q):</label>
+        <input type="number" id="precio" name="precio" required />
+
+        <button type="submit">Insertar Producto</button>
+
+        <!-- Botones de editar y eliminar -->
+        <div class="acciones">
+          <button class="btn-editar">Editar</button>
+          <button class="btn-eliminar">Eliminar</button>
+        </div>
+
+      </form>
+
+      <div id="notification"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("productForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Evitar el envío normal del formulario
+
+          const form = document.getElementById("productForm");
+          const formData = new FormData(form); // Crear un FormData con todos los campos del formulario
+
+          try {
+            const response = await fetch("/insertar-producto", {
+              method: "POST",
+              body: formData,
+            });
+
+            const result = await response.json();
+            const notification = document.getElementById("notification");
+
+            if (response.ok) {
+              notification.textContent = result.message;
+              notification.className = "success";
+            } else {
+              notification.textContent = result.message;
+              notification.className = "error";
+            }
+
+            notification.style.display = "block"; // Mostrar notificación
+          } catch (error) {
+            console.error("Error al insertar producto:", error);
+          }
+        });
+    </script>
+
+    <!-- Script para manejar el cierre de sesión -->
+    <script>
+      async function cerrarSesion() {
+        try {
+          const response = await fetch("/auth/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            window.location.href = "/login.html"; // Redirigir al login tras cerrar sesión
+          } else {
+            alert("Error al cerrar sesión");
+          }
+        } catch (error) {
+          console.error("Error al cerrar sesión:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

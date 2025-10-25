@@ -1,0 +1,98 @@
+/* Estilos globales en modo oscuro */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .navbar {
+    overflow: hidden;
+    background-color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+  }
+  
+  .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f2f2f2;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .filters select {
+    padding: 10px;
+    background-color: #444;
+    color: #f2f2f2;
+    border: 1px solid #555;
+    border-radius: 5px;
+  }
+  
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .product-card {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .product-card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .product-card h3 {
+    color: #f2f2f2;
+    margin: 10px 0;
+  }
+  
+  .product-card p {
+    color: #ddd;
+    margin-bottom: 10px;
+  }
+  
+  .product-card .price {
+    color: #28a745;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+  }
+  
+  .product-card button {
+    padding: 10px;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .product-card button:hover {
+    background-color: #218838;
+  }
+  

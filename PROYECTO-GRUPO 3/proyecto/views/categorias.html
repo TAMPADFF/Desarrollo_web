@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrar Categorías</title>
+    <link rel="stylesheet" href="/css/categorias.css" />
+  </head>
+  <body>
+    <!-- Navbar con enlaces a las diferentes secciones -->
+    <div class="navbar">
+      <a href="panelAdmin.html">Panel de Administración</a>
+      <a href="insertar-producto.html">Insertar Producto</a>
+      <a href="registerAdmin.html">Registrar</a>
+      <a href="Categorias.html">Registrar Categoría</a>
+      <a href="#" onclick="cerrarSesion()">Cerrar Sesión</a>
+    </div>
+
+    <h1>Administrar Categorías</h1>
+
+    <!-- Formulario para crear/editar categorías -->
+    <div class="form-container">
+      <form id="categoriaForm">
+        <input type="hidden" id="categoriaId" />
+        <!-- Campo oculto para el ID -->
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required />
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion"></textarea>
+
+        <label for="porcentaje_avaluo">Porcentaje de Avalúo:</label>
+        <input type="number" id="porcentaje_avaluo" required />
+
+        <button type="submit" id="submitButton">Agregar Categoría</button>
+      </form>
+    </div>
+
+    <!-- Listado de categorías -->
+    <div class="categoria-list">
+      <h2>Lista de Categorías</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Porcentaje Avalúo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="categoriaTableBody">
+          <!-- Categorías generadas dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // Variables
+      let categorias = [];
+      const categoriaForm = document.getElementById("categoriaForm");
+      const categoriaTableBody = document.getElementById("categoriaTableBody");
+
+      // Cargar categorías
+      async function cargarCategorias() {
+        const response = await fetch("/api/categorias");
+        categorias = await response.json();
+        mostrarCategorias();
+      }
+
+      // Mostrar categorías en la tabla
+      function mostrarCategorias() {
+        categoriaTableBody.innerHTML = "";
+        categorias.forEach((categoria) => {
+          categoriaTableBody.innerHTML += `
+                    <tr>
+                        <td>${categoria.nombre}</td>
+                        <td>${categoria.descripcion}</td>
+                        <td>${categoria.porcentaje_avaluo}%</td>
+                        <td>
+                            <button onclick="editarCategoria('${categoria._id}')">Editar</button>
+                            <button onclick="eliminarCategoria('${categoria._id}')">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+        });
+      }
+
+      // Agregar o actualizar categoría
+      categoriaForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("categoriaId").value;
+        const data = {
+          nombre: document.getElementById("nombre").value,
+          descripcion: document.getElementById("descripcion").value,
+          porcentaje_avaluo: document.getElementById("porcentaje_avaluo").value,
+        };
+
+        if (id) {
+          await fetch(`/api/categorias/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+        } else {
+          await fetch("/api/categorias", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+        }
+
+        categoriaForm.reset();
+        cargarCategorias();
+      });
+
+      // Editar categoría
+      function editarCategoria(id) {
+        const categoria = categorias.find((c) => c._id === id);
+        document.getElementById("categoriaId").value = categoria._id;
+        document.getElementById("nombre").value = categoria.nombre;
+        document.getElementById("descripcion").value = categoria.descripcion;
+        document.getElementById("porcentaje_avaluo").value =
+          categoria.porcentaje_avaluo;
+        document.getElementById("submitButton").textContent =
+          "Actualizar Categoría";
+      }
+
+      // Eliminar categoría
+      async function eliminarCategoria(id) {
+        await fetch(`/api/categorias/${id}`, {
+          method: "DELETE",
+        });
+        cargarCategorias();
+      }
+
+      // Cargar las categorías cuando se cargue la página
+      window.onload = cargarCategorias;
+    </script>
+
+    <!-- Script para manejar el cierre de sesión -->
+    <script>
+      async function cerrarSesion() {
+        try {
+          const response = await fetch("/auth/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            window.location.href = "/login.html"; // Redirigir al login tras cerrar sesión
+          } else {
+            alert("Error al cerrar sesión");
+          }
+        } catch (error) {
+          console.error("Error al cerrar sesión:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
