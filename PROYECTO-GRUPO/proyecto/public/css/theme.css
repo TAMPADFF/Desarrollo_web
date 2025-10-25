@@ -1,0 +1,81 @@
+/* Theme variables, fonts, utilities and animations */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root{
+  --color-bg: #f7fafc;
+  --color-card: #ffffff;
+  --color-primary: #0f62fe; /* blue */
+  --color-accent: #ffb020; /* warm accent */
+  --color-muted: #6b7280;
+  --text-dark:#0b1220;
+  --radius: 8px;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,0.06);
+  --shadow-md: 0 6px 18px rgba(11,17,32,0.08);
+}
+
+/* Base */
+html,body{height:100%;}
+body{
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-size:16px;
+  line-height:1.45;
+  color:var(--text-dark);
+  background:var(--color-bg);
+  margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Container */
+.container{max-width:1100px;margin:0 auto;padding:0 16px;}
+
+/* Utility spacing */
+.mt-1{margin-top:8px}.mt-2{margin-top:16px}.mt-3{margin-top:24px}
+.mb-1{margin-bottom:8px}.mb-2{margin-bottom:16px}.mb-3{margin-bottom:24px}
+.px-1{padding-left:8px;padding-right:8px}.py-1{padding-top:8px;padding-bottom:8px}
+
+/* Buttons */
+.btn{display:inline-block;padding:10px 16px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
+.btn-primary{background:var(--color-primary);color:#fff;box-shadow:var(--shadow-sm)}
+.btn-accent{background:var(--color-accent);color:#111}
+
+/* Card */
+.card{background:var(--color-card);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:16px}
+
+/* Headings */
+h1,h2,h3{margin:0 0 8px 0;font-weight:600}
+
+/* Responsive grid utilities */
+.grid{display:grid;gap:16px}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+
+/* Animations */
+.fade-in{animation:fadeIn .45s ease both}
+.slide-up{animation:slideUp .45s cubic-bezier(.2,.9,.3,1) both}
+.pulse{animation:pulse 1.6s infinite}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+/* Forms */
+input,button,select,textarea{font-family:inherit;font-size:1rem}
+input[type="text"],input[type="password"],textarea,select{padding:10px;border-radius:6px;border:1px solid #e5e7eb;background:#fff}
+
+/* Responsive breakpoints */
+@media (max-width:900px){
+  .grid-3{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+}
+
+/* Small aesthetic helpers */
+.muted{color:var(--color-muted)}
+.center{text-align:center}
+
+/* Accessibility focus */
+:focus{outline:3px solid rgba(15,98,254,0.15);outline-offset:2px}
+
+/* Quick theme variables usage example for existing .hero */
+.hero{padding:48px 0;background:linear-gradient(180deg, rgba(15,98,254,0.06), transparent)}
+
+/* Keep this file minimal — use variables and utilities here and adjust component-specific CSS files as needed. */
